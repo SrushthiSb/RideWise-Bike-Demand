@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Load the .env file
+
 load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -144,6 +145,6 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-SECRET_KEY = "django-insecure-k$(_=36sd!@_7%)r=iwbn!dwu%oxxq5_fl#^1#k^c-h0a52537"
-GEMINI_API_KEY = "AIzaSyCSjCDZF2ryX082BDfku3K5y0b_mL8jJKQ"
-OPENWEATHER_API_KEY= "82c8a29a50797b5390d8d9b7ed3936b8"
+
+
+
