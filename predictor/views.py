@@ -215,7 +215,7 @@ def fetch_weather_data(request):
     lat = request.GET.get('lat')
     lon = request.GET.get('lon')
     
-    API_KEY = "82c8a29a50797b5390d8d9b7ed3936b8"
+    API_KEY = os.getenv("OPENWEATHER_API_KEY")
     
     # Use coordinates if provided, otherwise fallback to a default city
     if lat and lon:
