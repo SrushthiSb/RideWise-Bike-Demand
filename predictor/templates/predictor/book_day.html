@@ -1,12 +1,7 @@
+{% extends 'predictor/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Day Demand Prediction</title>
-    <link rel="stylesheet" href="{% static 'predictor/css/style.css' %}">
-</head>
-<body>
+{% block content %}
+
 
 <div class="hero">
     <span class="badge">🚲 RideWise</span>
@@ -172,8 +167,7 @@ document.getElementById('extract-pdf-btn').addEventListener('click', async funct
     }
 });
 </script>
-</body>
-</html>
 
+{% endblock %}
 
 

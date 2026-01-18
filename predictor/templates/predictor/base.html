@@ -8,25 +8,37 @@
 </head>
 <body>
 
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
     <header class="navbar">
         <div class="logo">🚲 RideWise</div>
-
         <nav>
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'predict_selection' %}">Predict Demand</a>
-            <a href="{% url 'station_map' %}">Station Map</a>
-            <a href="{% url 'reserve' %}">Reserve Bike</a>    
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'reviews' %}">Reviews</a>
-            <a href="{% url 'profile' %}">👤</a>
-            
+            <a href="{% url 'profile' %}" class="profile-icon">👤</a>
         </nav>   
     </header>
+
+    <div class="main-framework">
+        <aside class="sidebar">
+            <div class="sidebar-links">
+                <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+                <a href="{% url 'predict_selection' %}">📈 Predict Demand</a>
+                <a href="{% url 'station_map' %}">🗺️ Station Map</a>
+                <a href="{% url 'reserve' %}">🎫 Reserve Bike</a>    
+                <a href="{% url 'about' %}">ℹ️ About</a>
+                <a href="{% url 'reviews' %}">💬 Reviews</a>
+            </div>
+        </aside>
+
+        <main class="content-display">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+{% else %}
+<div class="landing-page-container">
+    {% block content_no_auth %}{% endblock %}
+</div>
 {% endif %}
 
-{% block content %}{% endblock %}
 <div id="chatbot-wrapper">
     <div id="chat-window" class="chat-hidden">
         <div class="chat-header">

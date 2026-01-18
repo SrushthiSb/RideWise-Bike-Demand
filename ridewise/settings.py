@@ -41,7 +41,9 @@ OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ride-wise-bike-demand.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ridewise-bike-demand.onrender.com', 
+    '127.0.0.1', 
+    'localhost']
 
 
 # Application definition
@@ -76,7 +78,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # <--- ENSURE THIS LINE IS EXACTLY THIS
+        'DIRS': [BASE_DIR /'predictor' / 'templates'], # <--- ENSURE THIS LINE IS EXACTLY THIS
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

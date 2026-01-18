@@ -2,32 +2,43 @@
 {% load static %}
 
 {% block content %}
-<div class="hero" style="padding-top: 40px;">
-    <h1>Stations <span>Near You</span></h1>
-    <p class="subtitle">Showing bicycle hubs within 5km of your current position.</p>
+<div style="padding: 30px; min-height: 100vh; width: 100%;">
+    
+    <div style="margin-bottom: 30px; text-align: left;">
+        <h1 style="font-size: 2.5rem; color: #0a2540; margin-bottom: 10px;">Stations <span style="color: #1bbf73;">Near You</span></h1>
+        <p style="color: #64748b; font-size: 1.1rem;">Showing bicycle hubs within 5km of your current position.</p>
+    </div>
 
-    <div style="display: flex; gap: 20px; max-width: 1200px; margin: auto; text-align: left;">
-        <div id="map" style="flex: 2; height: 550px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 8px solid white;"></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 25px; align-items: flex-start;">
+        
+        <div id="map" style="flex: 2; min-width: 350px; height: 550px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 8px solid white; z-index: 1;"></div>
 
-        <div id="details-panel" style="flex: 1;">
-            <div id="status-card" style="background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <h2 id="st-name">Detecting Location...</h2>
-                <hr style="margin: 15px 0; opacity: 0.1;">
+        <div id="details-panel" style="flex: 1; min-width: 300px;">
+            <div id="status-card" style="background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;">
+                <h2 id="st-name" style="font-size: 1.5rem; color: #0a2540; margin-bottom: 5px;">Detecting Location...</h2>
+                <p id="st-instruction" style="color: #94a3b8; font-size: 0.9rem;">Please allow location access to see nearby hubs.</p>
+                
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
                 
                 <div id="info-content" style="display: none;">
-                    <div style="background: #e8fff4; padding: 15px; border-radius: 12px; margin-bottom: 10px;">
-                        <span style="display:block; font-size: 0.8rem; color: #16a34a;">Available Bikes</span>
-                        <b id="st-avail" style="font-size: 1.5rem;">-</b>
+                    <div style="background: #e8fff4; padding: 18px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid #1bbf73;">
+                        <span style="display:block; font-size: 0.75rem; color: #16a34a; font-weight: 700; text-transform: uppercase;">Available Bikes</span>
+                        <b id="st-avail" style="font-size: 1.8rem; color: #0a2540;">-</b>
                     </div>
-                    <div style="background: #f4f4f4; padding: 15px; border-radius: 12px; margin-bottom: 10px;">
-                        <span style="display:block; font-size: 0.8rem; color: #666;">Total Capacity</span>
-                        <b id="st-cap" style="font-size: 1.2rem;">-</b>
+                    
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 15px; margin-bottom: 15px;">
+                        <span style="display:block; font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Capacity</span>
+                        <b id="st-cap" style="font-size: 1.4rem; color: #0a2540;">-</b>
                     </div>
-                    <div style="background: #fff5dc; padding: 15px; border-radius: 12px;">
-                        <span style="display:block; font-size: 0.8rem; color: #b45309;">Utilization</span>
-                        <b id="st-util" style="font-size: 1.2rem;">-%</b>
+                    
+                    <div style="background: #fff5dc; padding: 18px; border-radius: 15px;">
+                        <span style="display:block; font-size: 0.75rem; color: #b45309; font-weight: 700; text-transform: uppercase;">Utilization Rate</span>
+                        <b id="st-util" style="font-size: 1.4rem; color: #0a2540;">-%</b>
                     </div>
-                    <p id="st-coords" style="margin-top: 15px; font-size: 0.75rem; color: #999;">Coordinates: -</p>
+
+                    <p id="st-coords" style="margin-top: 20px; font-size: 0.8rem; color: #cbd5e1; font-family: monospace;">Coordinates: -</p>
+                    
+                    <a href="{% url 'reserve' %}" style="display: block; margin-top: 25px; padding: 15px; background: #1bbf73; color: white; text-align: center; border-radius: 12px; font-weight: 600; text-decoration: none; transition: 0.3s;">Reserve a Bike Now</a>
                 </div>
             </div>
         </div>
@@ -40,17 +51,17 @@
 
 
 <script>
-    // 1. Initialize Map (Default view before location is found)
+    // 1. Initialize Map
     var map = L.map('map').setView([20, 0], 2); 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-    // 2. Function to add "Nearby" Stations based on User Coords
     function loadNearbyStations(userLat, userLng) {
-        // Here we simulate stations near your actual location
         const nearbyStations = [
-            { name: "Local Hub A", lat: userLat + 0.005, lng: userLng + 0.003, avail: 12, cap: 20 },
-            { name: "City Center Point", lat: userLat - 0.002, lng: userLng + 0.008, avail: 4, cap: 25 },
-            { name: "Transit Station", lat: userLat + 0.007, lng: userLng - 0.004, avail: 18, cap: 30 }
+            { name: "Downtown Hub", lat: userLat + 0.003, lng: userLng + 0.002, avail: 14, cap: 20 },
+            { name: "Eastside Station", lat: userLat - 0.002, lng: userLng + 0.004, avail: 5, cap: 25 },
+            { name: "University Circle", lat: userLat + 0.005, lng: userLng - 0.003, avail: 19, cap: 30 }
         ];
 
         nearbyStations.forEach(st => {
@@ -64,6 +75,7 @@
 
             marker.on('click', function() {
                 document.getElementById('info-content').style.display = "block";
+                document.getElementById('st-instruction').style.display = "none";
                 document.getElementById('st-name').innerText = st.name;
                 document.getElementById('st-avail').innerText = st.avail;
                 document.getElementById('st-cap').innerText = st.cap;
@@ -73,30 +85,26 @@
         });
     }
 
-    // 3. Get Actual Current Location
+    // 3. Geolocation Logic
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
-                
-                // Center map on User
                 map.setView([latitude, longitude], 15);
-
-                // Add "You Are Here" Marker
-                L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup("<b>You are here</b>").openPopup();
-
-                document.getElementById('st-name').innerText = "Select a station near you";
                 
-                // Load stations around the user
+                // CRITICAL FIX: Refresh map tiles after the page finishes rendering
+                setTimeout(() => { map.invalidateSize(); }, 500);
+
+                L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup("<b>Your Location</b>").openPopup();
+
+                document.getElementById('st-name').innerText = "Select a station";
                 loadNearbyStations(latitude, longitude);
             },
             () => {
-                document.getElementById('st-name').innerText = "Location access denied.";
+                document.getElementById('st-name').innerText = "Location Denied";
             }
         );
-    } else {
-        document.getElementById('st-name').innerText = "Browser doesn't support geolocation.";
     }
 </script>
 {% endblock %}

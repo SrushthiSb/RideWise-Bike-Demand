@@ -1,7 +1,7 @@
 {% extends 'predictor/base.html' %}
 {% load static %}
 
-{% block content %}
+{% block content_no_auth %}
 <div class="hero">
     <span class="badge">🚲 RideWise</span>
     <h1>Explore the City <span>Your Way</span></h1>
@@ -48,4 +48,6 @@
         <a href="{% url 'login' %}" class="btn" style="max-width: 250px; display: inline-block;">Get Started</a>
     </div>
 </div>
+
+
 {% endblock %}
