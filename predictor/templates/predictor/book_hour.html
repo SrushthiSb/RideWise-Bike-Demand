@@ -25,9 +25,7 @@
             <div class="form-group">
                 <label for="hour">Hour (0-23)</label>
                 <input type="number" name="hour" id="hour" min="0" max="23" required>
-                <button type="button" id="fetch-weather-btn" class="btn" style="width: auto; margin: 0; padding: 0 15px;">
-                    Fetch Weather
-                </button>
+                
             </div>
 
             <div class="form-group">
@@ -63,7 +61,14 @@
                 <label for="windspeed">Windspeed</label>
                 <input type="number" step="any" name="windspeed" id="windspeed" required>
             </div>
-
+            <button type="button" id="fetch-weather-btn" class="btn" style="width:auto; margin-left:10px;">
+                Fetch Weather
+            </button><br>
+            <label>Auto-fill from PDF Report</label>
+            <input type="file" id="pdf-upload" accept=".pdf" class="form-control">
+            <button type="button" id="extract-pdf-btn" class="btn" style="width:auto; margin-top:10px;">
+                Extract Values
+            </button>
             <button type="submit" class="btn">Predict Demand</button>
         </form>
     </div>
@@ -118,6 +123,57 @@
         });
     } else {
         alert("Geolocation is not supported by your browser.");
+    }
+});
+
+document.getElementById('extract-pdf-btn').addEventListener('click', async function() {
+    const fileInput = document.getElementById('pdf-upload');
+    if (!fileInput || fileInput.files.length === 0) {
+        alert("Please select a PDF file first.");
+        return;
+    }
+
+    const btn = this;
+    const formData = new FormData();
+    formData.append('pdf_file', fileInput.files[0]);
+
+    btn.innerText = "Extracting...";
+    
+    try {
+        const response = await fetch('/extract-pdf-data/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        });
+        
+        // Check if the server actually sent a valid response
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.error) throw new Error(data.error);
+
+        if (data.hour !== undefined) {
+    document.getElementById('hour').value = data.hour;
+}
+        // Auto-fill fields for DAILY prediction (No Hour)
+        if (data.date) document.getElementById('date').value = data.date;
+        if (data.temp) document.getElementById('temp').value = data.temp;
+        if (data.hum) document.getElementById('hum').value = data.hum;
+        if (data.windspeed) document.getElementById('windspeed').value = data.windspeed;
+        if (data.weathersit) document.getElementById('weathersit').value = data.weathersit;
+        if (data.season) document.getElementById('season').value = data.season;
+        
+        alert("Values extracted successfully!");
+    } catch (error) {
+        console.error(error);
+        alert("Extraction Error: " + error.message);
+    } finally {
+        btn.innerText = "Extract Values";
     }
 });
 </script>

@@ -319,7 +319,25 @@ def reviews(request):
 def profile(request):
     return render(request, 'predictor/profile.html')
 
+#parser api
+from django.http import JsonResponse
+from .utils import extract_bike_data
+import io
 
+def extract_pdf_api(request):
+    if request.method == 'POST' and request.FILES.get('pdf_file'):
+        try:
+            pdf_file = request.FILES['pdf_file']
+            pdf_content = io.BytesIO(pdf_file.read())
+            
+            # Use your utility function to extract values
+            from .utils import extract_bike_data
+            extracted_data = extract_bike_data(pdf_content)
+            
+            return JsonResponse(extracted_data)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 #chatbot
 import requests
@@ -340,12 +358,31 @@ def gemini_chat(request):
             api_key = settings.GEMINI_API_KEY
             
             # UPDATED URL: Using gemini-2.0-flash which is the current standard
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+            # Change this line in your gemini_chat function:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key={api_key}"
             
+            system_prompt = """
+            You are the official RideWise Assistant. You only answer questions about the RideWise platform.
+            RideWise is a bike-demand prediction and trip planning service.
+            
+            Key Features of RideWise:
+            1. Prediction: We use machine learning to predict bike availability and demand.
+            2. Trip Planning: Users can enter pickup and destination to plan bike routes.
+            3. Management: Users can view history and payments in the 'Account' menu.
+            
+            Guidelines:
+            - Be brief and helpful.
+            - If a user asks something unrelated to bikes or RideWise, politely redirect them.
+            - Mention specific website UI elements like 'Search bars' or 'Menu icon'.
+            """
+
             payload = {
+                "system_instruction": {
+                    "parts": [{"text": system_prompt}]
+                },
                 "contents": [
                     {
-                        "parts": [{"text": f"You are the RideWise Assistant. Answer briefly. User: {user_message}"}]
+                        "parts": [{"text": user_message}]
                     }
                 ]
             }
@@ -353,11 +390,15 @@ def gemini_chat(request):
             response = requests.post(url, headers={'Content-Type': 'application/json'}, json=payload)
             response_data = response.json()
 
+            # predictor/views.py (around line 228)
+
             if response.status_code == 200:
                 bot_reply = response_data['candidates'][0]['content']['parts'][0]['text']
                 return JsonResponse({"reply": bot_reply})
+            elif response.status_code == 429:
+                # This specifically handles the Quota Exceeded error
+                return JsonResponse({"reply": "I'm resting for a moment. Please wait about 30 seconds before asking again!"})
             else:
-                # Log error to terminal to see exactly why it fails
                 print(f"!!! GOOGLE API ERROR ({response.status_code}): {response_data}")
                 return JsonResponse({"reply": "I am experiencing a service connection issue."})
 

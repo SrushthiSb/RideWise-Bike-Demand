@@ -24,6 +24,8 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('reviews/', views.reviews, name='reviews'),
     path('profile/', views.profile, name='profile'),
+
+    path('extract-pdf-data/', views.extract_pdf_api, name='extract_pdf_api'),
 ]
 
 if settings.DEBUG:
