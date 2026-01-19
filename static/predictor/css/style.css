@@ -33,7 +33,7 @@ a { text-decoration: none; }
   justify-content: space-between;
   align-items: center;
   padding: 18px 60px;
-  background: rgba(10, 37, 64, 0.95);
+  background: rgba(97, 131, 107, 0.95);
   backdrop-filter: blur(10px);
 }
 
@@ -428,58 +428,113 @@ nav a:hover, nav span:hover { color: #1bbf73; }
 /* =========================
    SIDEBAR FRAMEWORK LAYOUT
 ========================= */
+/* =========================
+   SIDEBAR FRAMEWORK LAYOUT
+========================= */
 .main-framework {
   display: flex;
-  height: calc(100vh - 80px); /* Full height minus Navbar height */
+  height: calc(100vh - 80px);
   width: 100%;
-  overflow: hidden; /* Prevents the whole page from having a second scrollbar */
+  overflow: hidden;
   margin: 0;
-  padding: 0;
-  margin-bottom: 0;
+  background: #f4f7fa; /* Slightly off-white background to make the sidebar pop */
 }
 
-/* Sidebar Section (Small Part) */
+/* Sidebar Section with Shadow and Decoration */
 .sidebar {
-  width: 250px;
-  background: #b4d2ef;
+  width: 260px;
+  background: #f3f3f4; /* Your primary dark navy */
   padding: 30px 0;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   height: 100%;
+  
+  /* SHADOW EFFECT: Subtle right-side shadow for depth */
+  box-shadow: 6px 0 20px rgba(0, 0, 0, 0.15); 
+  
+  /* DECORATION: Clean border line on the right */
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  
+  z-index: 10; /* Ensures the shadow sits above the content area */
 }
 
 .sidebar-links {
   display: flex;
   flex-direction: column;
+  gap: 5px; /* Adds space between the buttons */
+  padding: 0 15px; /* Padding so links don't touch the edge */
 }
 
 .sidebar-links a {
-  color: #030609;
-  padding: 16px 25px;
-  font-size: 0.95rem;
+  color: #94a3b8; /* Elegant muted grey */
+  padding: 14px 20px;
+  border-radius: 12px; /* Modern rounded corners */
   font-weight: 500;
-  transition: all 0.3s;
-  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
 }
 
+/* HOVER DECORATION */
 .sidebar-links a:hover {
-  background: rgba(31, 34, 34, 0.05);
-  color: #1bbf73;
-  border-left-color: #1bbf73;
+  background: rgba(7, 2, 1, 0.915); /* Subtle green glow */
+  color: #ececf0; /* Your brand green */
+  transform: translateX(5px); /* Smooth slide-in effect */
+  box-shadow: -4px 0 0 #162c4b; /* Small accent line on the left upon hover */
 }
 
-/* Content Display Area (Other Part) */
+/* ACTIVE PAGE DECORATION */
+.sidebar-links a.active {
+  background: #3a3d41;
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 16, 16, 0.3);
+}
+
+.stat-box, .form-container {
+  margin-bottom: 30px;
+  display: block;
+}
+/* =========================
+   CONTENT DISPLAY (Attractive Decoration)
+========================= */
 .content-display {
-  flex: 1; /* Takes remaining space */
-  padding: 40px;
+  flex: 1;
+  padding: 35px;
   overflow-y: auto;
-  background: #f2f2f4;
-  height: 100%; /* Ensures it touches the bottom */
-  margin: 0
+  height: 100%;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Fix Hero padding for Sidebar view */
-.content-display .hero {
-  padding-top: 20px;
+/* Floating Card Effect for the content inside */
+.content-display > div {
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), 0 4px 10px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  min-height: 100%; /* Ensures the white card touches the bottom */
+  overflow-y: auto;
+  display: block;
+}
+
+/* Scrollbar Decoration */
+.content-display::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-display::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.content-display::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.content-display::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

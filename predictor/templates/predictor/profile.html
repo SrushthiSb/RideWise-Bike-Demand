@@ -1,7 +1,8 @@
 {% extends 'predictor/base.html' %}
 
 {% block content %}
-<div class="form-container" style="text-align: center;">
+<div style="padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh;" >
+    <div style="text-align: center;">
     <div class="profile-icon" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 20px auto;">
         {{ user.username|first|upper }}
     </div>
@@ -18,5 +19,7 @@
     </div>
     
     <a href="{% url 'logout' %}" class="btn" style="background: #ef4444; text-decoration: none; display: block;">Logout</a>
+
+</div>
 </div>
 {% endblock %}

@@ -20,12 +20,12 @@
     <div class="main-framework">
         <aside class="sidebar">
             <div class="sidebar-links">
-                <a href="{% url 'dashboard' %}">📊 Dashboard</a>
-                <a href="{% url 'predict_selection' %}">📈 Predict Demand</a>
-                <a href="{% url 'station_map' %}">🗺️ Station Map</a>
-                <a href="{% url 'reserve' %}">🎫 Reserve Bike</a>    
-                <a href="{% url 'about' %}">ℹ️ About</a>
-                <a href="{% url 'reviews' %}">💬 Reviews</a>
+                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">📊 Dashboard</a>
+                <a href="{% url 'predict_selection' %}" class="{% if request.resolver_match.url_name == 'predict_selection' or request.resolver_match.url_name == 'book_day' or request.resolver_match.url_name == 'book_hour' %}active{% endif %}">📈 Predict Demand</a>
+                <a href="{% url 'station_map' %}" class="{% if request.resolver_match.url_name == 'station_map' %}active{% endif %}">🗺️ Station Map</a>
+                <a href="{% url 'reserve' %}" class="{% if request.resolver_match.url_name == 'reserve' %}active{% endif %}">🎫 Reserve Bike</a>    
+                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">ℹ️ About</a>
+                <a href="{% url 'reviews' %}" class="{% if request.resolver_match.url_name == 'reviews' %}active{% endif %}">💬 Reviews</a>
             </div>
         </aside>
 
